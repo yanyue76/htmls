@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><script>(function(){try{
+var W=window;if(W.__TOY_PERF__){return;}
+var P=W.performance;if(!P||!P.getEntriesByType){return;}
+var M={fw:[],sent:false};W.__TOY_PERF__=M;
+M.pnow=function(){try{return P.now?P.now():(Date.now()-M.t0);}catch(e){return 0;}};
+M.head=Math.round(P.now?P.now():0);
+M.t0=Math.round((P.timeOrigin!==undefined&&P.timeOrigin!==null)?P.timeOrigin:
+ ((P.timing&&P.timing.navigationStart)||Date.now()));
+M.sid=(W.crypto&&W.crypto.randomUUID)?W.crypto.randomUUID():
+ (Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,10));
+M.fcp=undefined;
+M.readFCP=function(){try{
+ if(M.fcp!==undefined){return M.fcp;}
+ var es=P.getEntriesByType("paint")||[];
+ for(var i=0;i<es.length;i++){
+  if(es[i].name==="first-contentful-paint"){M.fcp=Math.round(es[i].startTime);return M.fcp;}}
+}catch(e){}
+return M.fcp;};
+try{var po=new W.PerformanceObserver(function(l){try{
+ var es=l.getEntries();for(var i=0;i<es.length;i++){
+  if(es[i].name==="first-contentful-paint"&&M.fcp===undefined){M.fcp=Math.round(es[i].startTime);
+   try{if(M.onFCP){M.onFCP();}}catch(e){}}}
+}catch(e){}});
+try{po.observe({type:"paint",buffered:true});}catch(e){po.observe({entryTypes:["paint"]});}
+}catch(e){}
+M.probe=function(){try{
+ var hit=[];var d=document;
+ var add=function(k){if(hit.indexOf(k)<0){hit.push(k);}};
+ if(W.unityInstance||W.UnityLoader||W.createUnityInstance){add("unity");}
+ if(W.vm||W.Scratch||W.ScratchVM){add("scratch");}
+ if(W.cc||W.cocos){add("cocos");}
+ if(W.Godot){add("godot");}
+ if(W.PIXI){add("pixi");}
+ if(W.Phaser){add("phaser");}
+ if(W.THREE){add("three");}
+ if(W.BABYLON){add("babylon");}
+ if(W.WebAssembly&&W.Module&&(W.Module.asm||W.Module.wasmBinary||W._malloc)){add("wasm");}
+ if(W.Vue||d.querySelector&&d.querySelector("[data-v-app]")){add("vue");}
+ if(W.React||W.ReactDOM){add("react");}
+ for(var i=0;i<hit.length;i++){if(M.fw.indexOf(hit[i])<0){M.fw.push(hit[i]);}}
+}catch(e){}};
+M.kind=function(){try{
+ var cv=document.getElementsByTagName?document.getElementsByTagName("canvas"):[];
+ var engine=["unity","scratch","cocos","godot","pixi","phaser","three","babylon"];
+ var hasEngine=false;
+ for(var i=0;i<engine.length;i++){if(M.fw.indexOf(engine[i])>=0){hasEngine=true;break;}}
+ if(cv&&cv.length>0){return hasEngine?"canvas-engine":"canvas";}
+ return hasEngine?"dom-engine":"dom";
+}catch(e){return "unknown";}};
+M.collect=function(withKind){try{
+ var nav=(P.getEntriesByType("navigation")||[])[0]||{};
+ var o={toy_id:M.toyID,render_mode:M.renderMode,layer:M.layer,
+  session_id:M.sid,time_origin:M.t0};
+ var put=function(k,v){try{var x=Math.round(v||0);if(x>0){o[k]=x;}}catch(e){}};
+ put("ttfb",nav.responseStart);put("dcl",nav.domContentLoadedEventEnd);
+ put("load",nav.loadEventEnd);put("doc_bytes",nav.decodedBodySize);
+ put("head_ms",M.head);put("transfer_bytes",nav.transferSize);
+ put("encoded_bytes",nav.encodedBodySize);
+ if(withKind){M.probe();o.kind=M.kind();o.fw=M.fw.join(",");}
+ var fcp=M.readFCP();
+ if(fcp!==undefined){o.fcp=fcp;}
+ if(M.fcpEst!==undefined){o.fcp_est=M.fcpEst;}
+ if(M.selfArmed){put("ff_self",M.ffSelf);o.ff_self_src=M.ffSrc||(M.selfDone?"none":"pending");}
+ return o;
+}catch(e){return null;}};
+}catch(e){}})();(function(){try{
+var W=window;var M=W.__TOY_PERF__;if(!M){return;}
+var P=W.performance;if(!P){return;}
+M.fcpEst=undefined;
+M.armEst=function(){try{
+ if(M.estArmed){return;}M.estArmed=true;
+ if(!W.MutationObserver){return;}
+ var D=document;
+ var SKIP={SCRIPT:1,STYLE:1,LINK:1,META:1,HEAD:1,TITLE:1,NOSCRIPT:1,TEMPLATE:1};
+ var INK={IMG:1,SVG:1,VIDEO:1,INPUT:1,BUTTON:1,TEXTAREA:1,SELECT:1};
+ var vis=function(n){try{var s=W.getComputedStyle(n);
+  return !s||(s.display!=="none"&&s.visibility!=="hidden"&&s.opacity!=="0");
+ }catch(e){return true;}};
+ var scan=function(n,dep){try{
+  if(dep>14){return false;}
+  if(n.nodeType===3){return /\S/.test(n.nodeValue||"");}
+  if(n.nodeType!==1){return false;}
+  if(SKIP[n.tagName]){return false;}
+  if(!vis(n)){return false;}
+  if(INK[n.tagName]){return true;}
+  try{var s=W.getComputedStyle(n);
+   if(s&&s.backgroundImage&&s.backgroundImage!=="none"){return true;}}catch(e){}
+  var c=n.childNodes||[];
+  for(var i=0;i<c.length;i++){if(scan(c[i],dep+1)){return true;}}
+  return false;
+ }catch(e){return false;}};
+ var anc=function(n){try{var p=n.parentNode;
+  while(p&&p.nodeType===1){if(SKIP[p.tagName]||!vis(p)){return false;}p=p.parentNode;}
+  return true;
+ }catch(e){return true;}};
+ var ink=function(n){try{
+  if(!n||!D.body){return false;}
+  if(n!==D.body&&(!D.body.contains||!D.body.contains(n))){return false;}
+  if(!anc(n)){return false;}
+  return scan(n,0);
+ }catch(e){return false;}};
+ var now=function(){try{return Math.round(P.now?P.now():(Date.now()-M.t0));}catch(e){return 0;}};
+ var mark=function(){try{
+  if(M.fcpEst!==undefined){return;}
+  var set=function(){try{if(M.fcpEst===undefined){M.fcpEst=now();}}catch(e){}};
+  if(W.requestAnimationFrame){W.requestAnimationFrame(function(){try{setTimeout(set,0);}catch(e){set();}});}
+  else{setTimeout(set,16);}
+ }catch(e){}};
+ var both=function(){try{mark();if(M.selfMark){M.selfMark();}}catch(e){}};
+ var mo=new W.MutationObserver(function(rs){try{
+  for(var i=0;i<rs.length;i++){
+   var a=rs[i].addedNodes||[];
+   for(var j=0;j<a.length;j++){if(ink(a[j])){both();mo.disconnect();return;}}
+   if(rs[i].type==="characterData"&&ink(rs[i].target)){both();mo.disconnect();return;}}
+ }catch(e){}});
+ mo.observe(D,{childList:true,subtree:true,characterData:true});
+}catch(e){}};
+}catch(e){}})();(function(){try{
+var W=window;var M=W.__TOY_PERF__;if(!M){return;}
+var P=W.performance;if(!P){return;}
+M.ffSelf=undefined;M.ffSrc=undefined;M.cvs=[];
+var hit=function(src){try{
+ if(M.ffSelf!==undefined){return;}
+ M.ffSelf=Math.round(M.pnow());M.ffSrc=src;M.unhookCtx();
+ try{if(M.onSelf){M.onSelf();}}catch(e){}
+}catch(e){}};
+M.unhookCtx=function(){try{
+ var H=W.HTMLCanvasElement;
+ if(M.gcOrig&&H&&H.prototype&&H.prototype.getContext===M.gcWrap){H.prototype.getContext=M.gcOrig;}
+ M.gcOrig=null;M.gcWrap=null;M.cvs=[];
+}catch(e){}};
+M.selfMark=function(){try{
+ if(M.ffSelf!==undefined||!W.requestAnimationFrame){return;}
+ W.requestAnimationFrame(function(){try{
+  W.requestAnimationFrame(function(){try{hit("raf2");}catch(e){}});
+ }catch(e){}});
+}catch(e){}};
+M.armSelf=function(){try{
+ if(M.selfArmed){return;}M.selfArmed=true;
+ var H=W.HTMLCanvasElement;
+ if(!H||!H.prototype||typeof H.prototype.getContext!=="function"){return;}
+ var orig=H.prototype.getContext;
+ M.gcOrig=orig;
+ M.gcWrap=function(t){
+  var r=orig.apply(this,arguments);
+  try{if(r&&M.cvs.length<8){
+   var dup=false;
+   for(var i=0;i<M.cvs.length;i++){if(M.cvs[i].c===this){dup=true;break;}}
+   if(!dup){M.cvs.push({c:this,t:(""+t).toLowerCase(),x:r,bad:false});}}}catch(e){}
+  return r;};
+ H.prototype.getContext=M.gcWrap;
+}catch(e){}};
+M.probeCanvas=function(round){try{
+ if(M.ffSelf!==undefined){return;}
+ var D=document;var gl=false;var tainted=false;
+ for(var i=0;i<M.cvs.length;i++){
+  var q=M.cvs[i];var cv=q.c;var x=q.x;
+  if(q.t.indexOf("webgl")>=0||q.t.indexOf("webgpu")>=0){gl=true;continue;}
+  if(q.bad||q.t!=="2d"||!x||!x.getImageData||!cv){continue;}
+  if(D.body&&D.body.contains&&!D.body.contains(cv)){continue;}
+  if(!cv.clientWidth||!cv.clientHeight||!cv.width||!cv.height){continue;}
+  var w=cv.width,h=cv.height;
+  var pts=[[w>>1,h>>1],[0,0],[w-1,h-1],[w>>2,h>>2]];
+  var p=pts[(round||0)%pts.length];
+  try{
+   var d=x.getImageData(p[0],p[1],1,1).data;
+   if(d[3]!==0||d[0]!==0||d[1]!==0||d[2]!==0){hit("pixel");return;}
+  }catch(er){q.bad=true;if(er&&er.name==="SecurityError"){tainted=true;}}
+ }
+ if(M.ffSrc===undefined){if(gl){M.ffSrc="gl-blind";}else if(tainted){M.ffSrc="tainted";}}
+}catch(e){}};
+}catch(e){}})();(function(){try{
+var W=window;var M=W.__TOY_PERF__;if(!M){return;}
+var NS="toy-shell-ability";
+M.toyID=44648353757184;M.renderMode=2;
+M.layer="content";
+M.armEst();M.armSelf();
+try{var pn=0;var pt=M.pnow();var pdone=function(){try{clearInterval(pk);}catch(e){}
+ try{if(M.unhookCtx){M.unhookCtx();}}catch(e){}
+ M.selfDone=true;try{if(M.onSelf){M.onSelf();}}catch(e){}};
+var pk=setInterval(function(){try{
+ M.probeCanvas(pn);
+ if(M.ffSelf!==undefined||++pn>=12||
+  (M.pnow()-pt)>=3600){pdone();}
+}catch(e){pdone();}},300);}catch(e){}
+M.seq=0;
+var flush=function(rs,up){try{
+ if(up==="self"){if(M.sent3){return;}M.sent3=true;}
+ else if(up){if(M.sent2){return;}M.sent2=true;}
+ else{if(M.sent){return;}M.sent=true;}
+ var o=M.collect(true);if(!o){return;}
+ o.flush_reason=up?(up==="self"?"self":"up"):rs;o.seq=++M.seq;o.ns=NS;o.type="perf";
+ M.pendingOut=(o.ff_self_src==="pending");
+ if(W.parent&&W.parent!==W){W.parent.postMessage(o,"*");}
+}catch(e){}};
+try{var n=0;var tk=setInterval(function(){try{M.probe();if(++n>8||M.done){clearInterval(tk);}}catch(e){}},400);}catch(e){}
+var arm=function(){try{
+ var waited=0;
+ var stop=function(t){try{M.done=true;clearInterval(t);}catch(e){}};
+ var tick=setInterval(function(){try{
+  waited+=300;
+  if(M.readFCP()!==undefined){stop(tick);flush("fcp",M.sent);return;}
+  if(M.fcpEst!==undefined){flush("est",false);}
+  if(waited>=5000){stop(tick);flush("bound",false);}
+ }catch(e){stop(tick);flush("err",false);}},300);
+ M.onFCP=function(){try{
+  if(!M.sent||M.sent2){return;}
+  stop(tick);flush("fcp",true);
+ }catch(e){}};
+ M.onSelf=function(){try{
+  if(!M.sent||M.sent3||!M.pendingOut){return;}
+  flush("self","self");
+ }catch(e){}};
+}catch(e){flush("err",false);}};
+if(document.readyState==="complete"){arm();}
+else{W.addEventListener("load",arm,false);}
+}catch(e){}})();</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1c3b4b">
+  <meta name="description" content="第三人称城市游戏，支持触屏移动、飞行、激光和冲刺。">
+  <title>游戏</title><link rel="stylesheet" href="./style.css"><style id="no-follow-gate">/* 已移除关注解锁门槛，隐藏相关入口 */#roadster-fuel-open,#vehicle-follow-status,.vehicle-follow-actions,section[aria-labelledby="follower-fuel-title"]{display:none!important}#fuel-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#fuel-tuning .fuel-infinite{justify-content:flex-start;margin-top:14px}#fuel-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#fuel-tuning input[type=range]:disabled{opacity:.4}#fuel-tuning output{font-variant-numeric:tabular-nums}</style>
+</head>
+<body>
+  <dialog id="landscape-gate" aria-labelledby="landscape-title"><div><div class="landscape-icon" aria-hidden="true">↻</div><h1 id="landscape-title">请横屏游玩</h1><p>横置手机或点击进入；系统不支持横屏时，将自动旋转游戏画面。</p><button id="landscape-enter">进入横屏</button></div></dialog>
+  <div id="game-viewport">
+  <canvas id="game" aria-label="第三人称游戏画面" tabindex="0"></canvas>
+  <div id="roadster-brand-mobile" aria-hidden="true">ROADSTER 2</div>
+  <section id="roadster-hud" aria-label="Roadster驾驶状态">
+    <div class="roadster-brand">ROADSTER 2</div><div id="roadster-state">城市驾驶</div>
+    <div class="roadster-speedometer"><strong id="roadster-speed">0</strong><span>km/h</span></div>
+    <div class="roadster-meters"><div class="roadster-propellant"><label class="mobile-meter-title">推进剂</label><div class="roadster-telemetry"><span id="roadster-height">离地 0.0 m</span><span id="roadster-energy">推进剂 100%</span></div>
+    <div class="roadster-fuel-track" role="progressbar" aria-label="喷气推进剂" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div id="roadster-fuel"></div></div>
+    </div><div id="drift-hud"><label class="mobile-meter-title">漂移</label><span id="drift-status">漂移能量 0%</span><div id="drift-meter" role="progressbar" aria-label="漂移能量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i id="drift-charge"></i></div></div>
+    </div>
+    <div id="roadster-attitude">俯仰 0° · 翻滚 0°</div>
+    <button id="roadster-fuel-open">关注解锁无限推进剂</button>
+    <div id="roadster-boundary-warning" role="status" hidden></div>
+  </section>
+  <div id="pursuit-status" role="status" aria-live="polite" hidden><strong></strong><span></span></div>
+  <div id="roadster-notice" role="status">沿西侧道路体验回环，东侧道路体验反弯坡道</div>
+  <div id="roadster-controls">
+    <button id="roadster-reset" aria-label="复位Roadster">复位<span class="keyboard-only"> · R</span></button>
+    <button id="roadster-auto" aria-label="自动喷气翻滚及降落" aria-pressed="false">自动：关</button>
+    <div id="roadster-keyboard-help" class="keyboard-only" aria-label="键盘操作提示">
+      <div><kbd>W / ↑</kbd> 油门 <kbd>S / ↓</kbd> 刹车／倒车 <kbd>A D / ← →</kbd> 转向</div>
+      <div><kbd>Shift</kbd> 喷气加速 <kbd>空格</kbd> 喷气升空</div>
+      <div><kbd>WASD / ↑↓←→</kbd> 空中方向 <kbd>Q</kbd><kbd>E</kbd> 特技翻滚</div>
+      <div>拖动画面调视角 <kbd>R</kbd> 复位 <kbd>Esc</kbd> 设置</div>
+    </div>
+    <div id="roadster-air-controls" role="group" aria-label="空中姿态控制">
+      <button class="pitch-control" data-roadster="pitch-up" aria-label="抬头">抬头</button><button class="pitch-control" data-roadster="pitch-down" aria-label="低头">低头</button>
+      <button data-roadster="roll-left" aria-label="向左翻滚">左翻</button><button data-roadster="roll-right" aria-label="向右翻滚">右翻</button>
+    </div>
+    <div class="roadster-actions" role="group" aria-label="Roadster踏板与喷气">
+      <button data-roadster="boost" aria-label="按住喷气加速"><img class="hud-control-icon" src="./ui/rocket-launch.svg" alt=""><span class="desktop-control-label">喷气加速</span><span class="mobile-control-label">喷射</span><small>按住助推</small></button>
+      <button data-roadster="lift" aria-label="按住喷气升空"><img class="hud-control-icon" src="./ui/arrow-up-bold.svg" alt=""><span class="desktop-control-label">喷气升空</span><span class="mobile-control-label">升空</span><small>按住升空</small></button>
+      <button data-roadster="brake" aria-label="刹车，停下后按住倒车"><img class="hud-pedal-surface" src="./ui/pedal.png" alt=""><span>刹车</span><small>停下后倒车</small></button>
+      <button data-roadster="throttle" aria-label="按住油门"><img class="hud-pedal-surface" src="./ui/pedal.png" alt=""><span>油门</span><small>按住加速</small></button>
+    </div>
+  </div>
+  <div id="drift-actions"><button data-roadster="drift" aria-label="按住漂移"><img class="hud-control-icon" src="./ui/car-traction-control.svg" alt=""><em>漂移</em><span class="keyboard-only"> · C</span></button><button data-roadster="drift-nitro" disabled aria-label="满能量后短时加速"><img class="hud-control-icon" src="./ui/speedometer.svg" alt=""><em><span class="desktop-control-label">释放</span>加速</em><span class="keyboard-only"> · V</span></button></div>
+  <button id="race-open" class="session-button">赛事地点</button>
+  <button id="race-venue-back" class="session-button" hidden>返回城市</button>
+  <button id="roadster-exit" class="session-button">下车<span class="keyboard-only"> · H</span></button>
+  <div id="foot-actions" role="group" aria-label="原角色能力"><button id="foot-fly">飞行</button><button data-roadster="foot-laser">激光</button><button id="foot-punch">挥拳</button><button id="foot-dash">冲刺</button><button data-roadster="foot-up">上升</button><button data-roadster="foot-down">下降</button></div>
+  <div id="foot-key-help" class="keyboard-only">WASD / 方向键 移动 · G 飞行 · E / Q 升降 · F 激光 · 空格冲刺 · H 上车</div>
+  <div id="race-hud" hidden role="status"></div><div id="race-results" hidden></div>
+  <div id="race-lobby-actions" hidden><button id="race-start-quick">开始比赛</button></div>
+  <div id="cockpit" hidden aria-hidden="true">
+    <svg class="car-dashboard" viewBox="0 0 600 150"><path fill="#203641" stroke="#4b626b" d="M0 150V50Q125 2 300 16T600 50V150Z"/><path d="M220 52h160v34H220Z" fill="#172c35"/><path d="M240 65h120" stroke="#a7ffd0"/><g class="cockpit-wheel" transform="translate(300 115)"><circle r="62" fill="#14242c" stroke="#667c80" stroke-width="10"/><circle r="16" fill="#526b73"/><path d="M-52-20-12 0M52-20 12 0M0 15v42" stroke="#8b9b9e" stroke-width="8"/><path d="M-48-31-64-20-57 8-37-5M48-31 64-20 57 8 37-5" fill="#c9cbd0" stroke="#a2a6ac" stroke-width="2"/></g></svg>
+    <svg class="bike-dashboard" viewBox="0 0 600 150"><path d="M160 140 195 85 405 85 440 140M210 85l-30-20m210 20 30-20" stroke="#889da2" stroke-width="12"/><rect x="258" y="59" width="84" height="40" rx="12" fill="#203641" stroke="#82989d"/><path d="M276 78h48" stroke="#b8ffd1"/><path d="M150 130 171 114 192 126 171 148M450 130 429 114 408 126 429 148" fill="#c9cbd0" stroke="#a2a6ac"/></svg>
+  </div>
+  <div id="status-bar"><span id="movement-mode">站立</span><span id="weapon-status">激光就绪</span><span id="vehicle-speed" hidden></span><span id="vehicle-type" hidden></span><span id="boundary-status" aria-live="polite" hidden>接近城市边界</span></div>
+  <aside id="map-panel" aria-label="城市地图导航"><button id="map-open" type="button" aria-label="打开城市地图与换车行" aria-haspopup="dialog" aria-controls="city-map" aria-expanded="false"><canvas id="minimap" role="img" aria-label="附近道路小地图"></canvas><span class="map-open-caption">地图 · 换车</span></button><span id="rescue-count">危情 0 · 已救 0</span><span class="map-legend">橙：危情 · 绿：安全点</span></aside>
+  <div id="rescue-info" aria-live="polite"></div>
+  <div id="escort-state" hidden role="status"></div>
+  <button id="settings-open" class="settings-button" aria-label="设置" aria-haspopup="dialog" aria-controls="settings">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3-.5 2.4-2 .9L4.3 5.5 2 9.5l1.8 1.6v2L2 14.7l2.3 4 2.2-.8 2 .9L9 21h6l.5-2.2 2-.9 2.2.8 2.3-4-1.8-1.6v-2L22 9.5l-2.3-4-2.2.8-2-.9L15 3Z"/><circle cx="12" cy="12" r="3"/></svg><span class="mobile-menu-label">设置</span>
+  </button>
+  <button id="drive" class="drive-action" aria-label="驾驶，需要落地并靠近完整车辆" disabled>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M3 10h7m4 0h7m-9 4v7"/></svg><span>驾驶</span>
+  </button>
+  <div id="reticle"><div id="target">正在加载城市</div><div class="reticle-ring"></div><b></b></div>
+  <div id="impact"><strong></strong><small></small></div><div id="flash"></div><div id="speed-lines"></div>
+  <div id="touch-controls">
+    <div id="joystick" role="group" aria-label="移动摇杆"><span></span><small id="roadster-stick-hint" class="touch-only">上推油门 · 下拉刹车</small></div>
+    <div id="roadster-dpad" role="group" aria-label="方向键驾驶">
+      <button data-roadster="pad-up" aria-label="前进；空中向前飞">↑</button><button data-roadster="pad-left" aria-label="左转；空中向左飞">←</button><button data-roadster="pad-right" aria-label="右转；空中向右飞">→</button><button data-roadster="pad-down" aria-label="刹车及倒车；空中向后飞">↓</button>
+      <small>地面 ↑ 油门 ↓ 刹车 · 空中四向飞行</small>
+    </div>
+    <div id="roadster-wheel-controls" role="group" aria-label="方向盘驾驶">
+      <div id="roadster-wheel" role="group" aria-label="拖动方向盘转向，松手回中">
+        <img id="roadster-wheel-disc" src="./ui/wheel.png" alt="" draggable="false">
+      </div>
+      <div id="roadster-wheel-pitch" role="group" aria-label="地面俯仰与空中前后方向"><button data-roadster="wheel-pitch-up" aria-label="地面抬头；空中向前飞">↑</button><button data-roadster="wheel-pitch-down" aria-label="地面低头；空中向后飞">↓</button></div>
+      <small>地面转向 · 空中左右移动 · ↑↓ 前后飞行</small>
+    </div>
+    <button id="rescue" class="rescue-action" hidden aria-label="救援附近遇险NPC，护送到安全点">救援</button>
+    <div id="driving-controls" role="group" aria-label="车辆踏板" hidden>
+      <button id="driving-view" class="driving-view-action" aria-label="切换第一人称驾驶视角"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12s3-7 9-7 9 7 9 7-3 7-9 7-9-7-9-7Z"/><circle cx="12" cy="12" r="3"/></svg><span>第一人称</span></button>
+      <button id="brake" class="pedal brake-pedal" data-pedal="brake" aria-label="刹车，停下后继续按住可倒车">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="8" width="24" height="15" rx="4"/><path d="M9 12v7m5-7v7m5-7v7m5-7v7M13 23v5h6v-5"/></svg><span>刹车</span>
+      </button>
+      <button id="throttle" class="pedal throttle-pedal" data-pedal="throttle" aria-label="油门，按住加速">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="9" y="3" width="14" height="23" rx="4"/><path d="M13 8h6m-6 5h6m-6 5h6m-6 5h6M14 26v3h4v-3"/></svg><span>油门</span>
+      </button>
+    </div>
+    <div id="ability-controls" role="group" aria-label="角色能力">
+      <div id="vertical-controls" hidden>
+        <button data-key="KeyE" aria-label="上升"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V4m-6 6 6-6 6 6"/></svg></button>
+        <button data-key="KeyQ" aria-label="下降"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></button>
+      </div>
+      <button id="fly" class="ability flight" aria-label="切换飞行模式" aria-pressed="false">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m16 4 4 11 9 6-10-2-3 9-3-9-10 2 9-6Z"/></svg><span>飞行</span>
+      </button>
+      <button id="laser" class="ability laser" aria-label="发射激光，按住连续发射">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m4 24 8-8m-5 12 9-9M14 8l10 10m-13-7 6-6 10 10-6 6Zm12-5 3-3m0 9h5m-14-9V0"/></svg><span>激光</span>
+      </button>
+      <button id="punch" class="ability punch" aria-label="挥拳，近距离破坏">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 18V9a2 2 0 0 1 4 0v6-8a2 2 0 0 1 4 0v8-7a2 2 0 0 1 4 0v7-5a2 2 0 0 1 4 0v9l-3 6H12l-6-6a3 3 0 0 1 3-5l4 4M12 25v4h10v-4"/></svg><span>挥拳</span><small class="cooldown" aria-hidden="true"></small>
+      </button>
+      <button id="dash" class="ability dash" aria-label="向前冲刺">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M8 25 25 8M14 8h11v11M3 17h7M3 23h4"/></svg><span>冲刺</span><small class="cooldown" aria-hidden="true"></small>
+      </button>
+    </div>
+  </div>
+  <div id="navigation-hud" hidden><span id="navigation-label"></span><button id="navigation-cancel" type="button" aria-label="取消导航">×</button></div>
+  <dialog id="city-map" aria-labelledby="city-map-title">
+    <header class="city-map-heading"><button id="map-back" type="button" aria-label="返回城市地图" hidden>← 地图</button><h1 id="city-map-title">城市地图</h1><button id="map-garage-open" type="button">G · 换车行</button><button id="city-map-close" type="button" aria-label="关闭地图，继续游戏">×</button></header>
+    <div id="map-page">
+      <div class="city-map-surface"><canvas id="city-map-canvas" aria-label="可拖动和缩放的城市地图"></canvas><div class="city-map-tools"><button id="map-zoom-in" type="button" aria-label="放大地图">＋</button><button id="map-zoom-out" type="button" aria-label="缩小地图">−</button><output id="map-zoom-value" aria-label="地图缩放">1.0×</output><button id="map-center" type="button">定位我</button><button id="map-fit" type="button">全城</button></div></div>
+      <aside class="city-map-directory"><p id="map-context">点击地点查看 · 拖动地图移动视野</p><nav id="map-places" aria-label="地图地点"><button type="button" data-map-place="race"><b>赛</b><span>人机赛车<small>到达报名点后参赛</small></span></button><button type="button" data-map-place="garage"><b>G</b><span>换车行<small>图标选车</small></span></button><button type="button" data-map-place="corner"><b>街</b><span>改造街口</span></button><button type="button" data-map-place="park"><b>园</b><span>街心花园</span></button><button type="button" data-map-place="loop"><b>环</b><span>大回环</span></button><button type="button" data-map-place="ramp"><b>坡</b><span>反弯坡道</span></button></nav><p class="city-map-legend">▲ 你的位置<br>绿色：安全点<br>橙色：危情</p><p id="map-place-status" role="status"></p><p id="map-navigation-status" role="status"></p><button id="map-navigation-cancel" type="button" hidden>取消导航</button></aside>
+    </div>
+    <section id="garage-page" aria-labelledby="vehicle-picker-title" hidden>
+      <h2 id="vehicle-picker-title">选择你的座驾</h2><button id="garage-navigate" type="button">导航到换车行附近</button><p>停车落地后选择车型，关闭地图即可驾驶。Roadster 保留喷气与漂移；其他车型使用地面驾驶。</p>
+      <div id="vehicle-grid" role="group" aria-label="车辆选择"></div><p id="vehicle-switch-status" role="status" aria-live="polite"></p>
+      <p id="vehicle-follow-status" role="status"></p><div class="vehicle-follow-actions"><button id="vehicle-follow-home" type="button">前往 UP 主主页</button><button id="vehicle-follow-check" type="button">检查关注状态</button></div>
+    </section>
+  </dialog>
+  <dialog id="race-invite" aria-labelledby="race-invite-title"><h1 id="race-invite-title">参加人机赛车？</h1><p>驾驶 Roadster 2，与 4 辆人机赛车进行三圈比赛。</p><p>确认后进入独立赛场，退出比赛回到这里。</p><div><button id="race-invite-no" type="button">暂不参加</button><button id="race-invite-yes" type="button">参加比赛</button></div></dialog>
+  <dialog id="settings" aria-labelledby="settings-title">
+    <div class="settings-heading"><h1 id="settings-title">设置</h1><button id="settings-close" aria-label="关闭设置">×</button></div>
+    <section class="settings-section roadster-instructions" aria-labelledby="roadster-input-title">
+      <h2 id="roadster-input-title">操作方式</h2>
+      <label class="roadster-control-choice" for="input-device-mode">输入设备<select id="input-device-mode"><option value="auto">自动识别</option><option value="touch">触控（显示屏幕按钮）</option><option value="keyboard">键盘</option></select></label>
+      <p>触控入口：输入设备选“触控”，再在下方选择摇杆、方向键或方向盘。电脑也可用鼠标操作屏幕按钮。键盘支持 WASD 或 ↑ ↓ ← →：前进、刹车／倒车、左右转向；步行和喷气飞行也可用方向键，Q / E 翻滚。</p>
+      <label class="roadster-control-choice" for="roadster-control-mode">操作模式<select id="roadster-control-mode"><option value="joystick">摇杆</option><option value="arrows">方向键</option><option value="wheel">方向盘</option></select></label>
+      <p>方向键：地面左右转向、上下油门与刹车；喷气开启并离地后，四向直接控制飞行方向。</p>
+      <p>方向盘：地面拖动转盘转向，松手回中；空中转盘控制左右移动，旁边 ↑↓ 控制前后飞行。三种模式均可同时喷气和翻滚。</p>
+    </section>
+    <section class="settings-section"><h2>驾驶手感</h2><label for="driving-mode">地面驾驶</label><select id="driving-mode"><option value="classic">原版驾驶</option><option value="city">城市驾驶试验</option></select><p id="driving-mode-status" role="status"></p></section>
+    <section class="settings-section"><h2>换车行</h2><p>点击右上角地图也能打开换车行。</p><button id="settings-garage-open" type="button">打开换车行</button></section>
+    <section class="settings-section"><h2>画质</h2><label for="graphics-quality">画质档位</label><select id="graphics-quality"><option value="auto">自动推荐</option><option value="low">流畅</option><option value="balanced">均衡</option><option value="high">高清</option><option value="ultra">超清</option></select><p id="graphics-status" role="status"></p><p>高清与超清提高画面分辨率，耗电和发热也会增加。机型无法识别时按设备能力推荐；手动档位不会自动降档。</p></section>
+    <section class="settings-section roadster-instructions" aria-labelledby="follower-fuel-title">
+      <h2 id="follower-fuel-title">无限推进剂</h2>
+      <p>关注作者后解锁无限推进剂，喷气加速与升空均不再消耗。已关注可直接检查。</p>
+      <div class="roadster-locations"><button id="follower-home">前往作者主页</button><button id="follower-check">检查关注状态</button></div>
+      <p id="follower-status" role="status">正在等待平台连接；普通驾驶不受影响。</p>
+    </section>
+    <section class="settings-section roadster-instructions" id="fuel-tuning" aria-labelledby="fuel-tuning-title">
+      <h2 id="fuel-tuning-title">推进剂</h2>
+      <label for="fuel-seconds">续航时间<output id="fuel-seconds-value">8 秒</output></label>
+      <input id="fuel-seconds" aria-label="推进剂续航秒数" type="range" min="1" max="120" step="1" value="8">
+      <label class="fuel-infinite"><input id="fuel-infinite" type="checkbox"> 无限推进剂</label>
+      <p id="fuel-tuning-status" role="status">喷气加速与升空共用一箱，松开喷气后自动回充。</p>
+    </section>
+
+    <section class="settings-section roadster-instructions roadster-audio-settings" aria-labelledby="roadster-audio-title">
+      <h2 id="roadster-audio-title">声音</h2>
+      <label class="sound-enable"><input id="roadster-sound-enabled" type="checkbox" checked> 行驶与喷气音效</label>
+      <label class="sound-volume" for="roadster-sound-volume">音效音量 <output id="roadster-sound-value">65%</output></label>
+      <input id="roadster-sound-volume" aria-label="音效音量" type="range" min="0" max="100" step="1" value="65">
+    </section>
+    <section class="settings-section roadster-instructions" aria-labelledby="roadster-instructions-title">
+      <h2 id="roadster-instructions-title">Roadster 操作</h2><p>右上角小地图左侧显示通缉星级，亮星为当前等级，暗星为空。通缉等级分为1星警戒、2星警告、3星出动。20秒内连续破坏3处不同建筑或车辆才会升到3星，引来蓝光监控人与红光音响人；同一栋楼多个墙洞只算一处，同一次连环碰撞不重复计数。第2处会提前警告，停止破坏10秒可清除警戒。达到3处后还有5秒预警，离开现场40米可取消。追捕沿地面进行，最长30秒，结束或取消后冷却90秒；拉开超过60米并保持10秒也可提前甩掉。追上时提示警告，当前不扣血、不送监狱。复位城市清除追捕；人机赛不触发。</p><p>地面车速超过约 36 km/h 时，转弯并按住“漂移”（键盘 C）。有效侧滑为左上能量条蓄能，满格后点“释放加速”（键盘 V），获得约 1.6 秒短时加速。与推进剂分开；空中与轨道不蓄漂移能量。</p><p id="roadster-seat-help">停车落地后按 H / 菜单 → 下车。下车后：键盘 W / S 前后、A / D 左右；手机拖动左侧摇杆，往哪拉就往哪走。拖动空白画面调整视角。落地后靠近完整的停放或慢行车辆，按 H / 菜单 → 上车即可驾驶；回到自己的白色 Roadster 5 米内也可上车。</p><p>点击“人机赛车”进入独立环形场地，你与四辆人机在五个发车位集合。点击“开始比赛”，三秒倒计时后发车，三圈决胜。设置可暂停比赛；R / 复位返回最近检查点；返回城市退出比赛。无需服务器。</p>
+      <div class="keyboard-only">
+        <p>第三人称驾驶。W 油门，S 刹车；停下后继续按住 S 倒车。A / D 转向，拖动画面调整视角。</p>
+        <p>按住 Shift 喷气加速，按住空格喷气升空。喷气开启并离地后，W 前、S 后、A 左、D 右，方向跟随当前视角，车身随输入小幅倾斜。松开方向缓慢减速。方向键与 WASD 均控制移动方向，Q / E 做特技翻滚。R 复位，Esc 打开设置。</p>
+      </div>
+      <div class="touch-only">
+        <p>第三人称驾驶。左侧摇杆上推油门、下推刹车及倒车，左右转向；也可使用右侧踏板按钮。拖动画面调整视角。</p>
+        <p>喷气加速、喷气升空按钮点按开启，再点关闭，无需持续按住。喷气开启并离地后，摇杆往哪拉就往哪飞，车身随方向小幅倾斜；松开摇杆缓慢减速。右侧左翻、右翻仍可做特技翻滚。点击复位返回回环入口。</p>
+      </div>
+      <p>普通飞行不需要开启“自动”：喷气开启时由 WASD / 摇杆控制方向并辅助稳定姿态。手动俯仰或翻滚时暂时退出方向辅助；关闭喷气或推进剂耗尽后按原有惯性与重力滑落，不提供免费推力。侧翻或倒置落地后会短暂停留，再自动扶正，可继续驾驶；保留当前位置和场景破坏，不需要复位。扶正会检查周围障碍，空间不足时先避让。</p>
+      <p>未解锁无限推进剂时，单独升空喷气可持续约 8 秒，同时助推会更快耗尽；着地并松开喷气后约 5 秒补满。推进剂耗尽后仍可手动控制姿态。</p>
+      <p>自动开关：开启后保留油门、刹车输入，不主动刹停；沿回环行驶时不接管。上方空间足够、推进剂充足时喷气升空，完成一次翻滚后摆正降落。左右翻滚方向逐次交替；落地后保持待命，再次起跳可自动处理。再次点击关闭并恢复手动。低空或推进剂不足时优先摆正降落；复位、暂停或离开页面会关闭自动及喷气开关。</p>
+      <p>大回环需要保持速度；速度不足或驶出边缘会掉落。反弯坡道末端直接离地，后续姿态由玩家控制。</p>
+      <div class="roadster-locations"><button data-roadster-location="loop">前往回环入口</button><button data-roadster-location="ramp">前往反弯坡道入口</button><button data-roadster-location="district">前往沿街街区</button><button data-roadster-location="corner41">前往改造街口</button><button data-roadster-location="park">前往街心花园</button></div>
+    </section>
+    <section class="settings-section" aria-labelledby="instructions-title">
+      <h2 id="instructions-title">操作说明</h2>
+      <p>拖动画面调整视角，摇杆方向随视角变化，冲刺朝视角前方。</p>
+      <dl class="instructions">
+        <div><dt>移动</dt><dd>左侧摇杆 / W A S D</dd></div>
+        <div><dt>驾驶</dt><dd>落地靠近完整车辆后点击驾驶。摇杆只负责左右转向；按住油门 / W 加速，按住刹车 / S 减速，停下后继续按住可倒车。松开踏板后减速；油门和刹车同时按下时刹车优先。点击下车返回主角控制。</dd></div>
+        <div><dt>飞行</dt><dd>飞行按钮 / G：切换模式。开启后可空中移动，关闭后下降落地。</dd></div>
+        <div><dt>升降</dt><dd>飞行时按 ↑ / ↓，或 E / Q</dd></div>
+        <div><dt>激光</dt><dd>按住激光按钮 / F，可在移动时发射</dd></div>
+        <div><dt>挥拳</dt><dd>点击挥拳按钮，破坏面前近距离的外墙、楼板、家具、车辆和路灯；无专用快捷键</dd></div>
+        <div><dt>冲刺</dt><dd>冲刺按钮 / 空格，朝视角方向冲刺；地面模式沿地面前进。飞行时可按空格 + E / Q 向上 / 向下冲刺。</dd></div>
+        <div><dt>破坏</dt><dd>冲刺、激光或挥拳可破坏外墙、楼板、家具、车辆和路灯</dd></div>
+        <div><dt>房间</dt><dd>靠近大楼且前方路线有至少3个可穿房间时，一次冲刺会按路线补足距离，连续穿过3～5间及其隔墙；保持朝视角方向直行，房间不足或触及地面、城市边界时按实际路线停止</dd></div>
+        <div><dt>设置</dt><dd>右上角按钮 / Esc，打开时暂停游戏</dd></div>
+        <div><dt>救援</dt><dd>NPC不可被攻击或受伤。小地图橙色编号表示危情，绿色表示安全点。靠近遇险NPC后点击救援，携带NPC前往安全点并落地，完成护送；护送支持飞行，护送期间不能上车。血量规则暂未启用。</dd></div>
+        <div><dt>抱持</dt><dd>护送使用公主抱，双臂承托NPC。护送中可移动、飞行、发射激光和冲刺，暂不能挥拳；到绿色安全点后关闭飞行并落地，放下NPC完成救援。</dd></div>
+        <div><dt>车流</dt><dd>城市中有NPC驾驶的车辆，会跟车减速并按信号灯通行。车辆停稳后可靠近点击驾驶，原驾驶员安全下车。破坏有人驾驶的车辆不会伤害驾驶员；部分驾驶员会触发小地图危情，可公主抱护送到安全点。</dd></div>
+        <div><dt>车型</dt><dd>轿车、摩托车和货车均可驾驶、下车和破坏。起点两侧有摩托车，南侧道路两端有货车；活动车流也包含三种车型。摩托车骑乘时主角保持可见。</dd></div>
+        <div><dt>视角</dt><dd>驾驶时点击踏板上方的视角按钮，可切换第一人称和第三人称。下车回到原第三人称角色控制。</dd></div>
+        <div><dt>撞墙</dt><dd>主角驾驶时，以足够速度撞击外墙或隔墙可开出车身能通过的缺口，并撞碎通路内家具。速度不足会停车；接近NPC时车辆停止。城市边界、楼板和其他车辆保持阻挡。</dd></div>
+      </dl>
+    </section>
+    <section class="settings-section performance-section" aria-labelledby="performance-title"><h2 id="performance-title">运行状态</h2><div><span>帧率</span><output id="fps">— FPS</output></div><div><span>绘制调用</span><output id="calls">— CALLS</output></div></section>
+    <section class="settings-section reset-section"><div><h2>重置</h2><p>清除当前破坏状态，回到初始位置。</p></div><button id="reset">重置</button></section>
+  </dialog>
+  <div id="error" hidden><strong>无法启动三维画面</strong><p>请启用浏览器硬件加速，或使用支持 WebGL 的浏览器打开。</p><p id="error-detail"></p><button id="error-retry">重新载入</button></div>
+  </div>
+  <script>
+(function(){
+  var d={fuelSeconds:8,infinite:false};
+  try{
+    var s=JSON.parse(localStorage.getItem('roadster-fuel-tuning')||'null');
+    if(s&&typeof s.fuelSeconds==='number') d.fuelSeconds=Math.max(1,Math.min(120,s.fuelSeconds));
+    if(s&&typeof s.infinite==='boolean') d.infinite=s.infinite;
+  }catch(e){}
+  window.__ROADSTER_TUNING__=d;
+})();
+</script>
+<script src="./main.js"></script>
+<script>
+(function(){
+  var T=window.__ROADSTER_TUNING__;
+  var range=document.getElementById('fuel-seconds');
+  var out=document.getElementById('fuel-seconds-value');
+  var inf=document.getElementById('fuel-infinite');
+  var status=document.getElementById('fuel-tuning-status');
+  if(!T||!range||!out||!inf) return;
+  range.value=String(T.fuelSeconds);
+  inf.checked=!!T.infinite;
+  function sync(){
+    var v=Math.max(1,Math.min(120,Number(range.value)||8));
+    T.fuelSeconds=v;
+    T.infinite=!!inf.checked;
+    range.disabled=T.infinite;
+    out.textContent=T.infinite?'∞':v+' 秒';
+    if(status) status.textContent=T.infinite?'推进剂不会消耗，喷气与升空可一直使用。':'喷气加速与升空共用一箱，松开喷气后自动回充。';
+    try{localStorage.setItem('roadster-fuel-tuning',JSON.stringify({fuelSeconds:v,infinite:T.infinite}));}catch(e){}
+  }
+  range.addEventListener('input',sync);
+  inf.addEventListener('change',sync);
+  sync();
+})();
+</script>
+</body>
+</html>
