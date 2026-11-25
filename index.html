@@ -221,7 +221,7 @@ else{W.addEventListener("load",arm,false);}
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#1c3b4b">
   <meta name="description" content="第三人称城市游戏，支持触屏移动、飞行、激光和冲刺。">
-  <title>游戏</title><link rel="stylesheet" href="./style.css"><style id="no-follow-gate">/* 已移除关注解锁门槛，隐藏相关入口 */#roadster-fuel-open,#vehicle-follow-status,.vehicle-follow-actions,section[aria-labelledby="follower-fuel-title"]{display:none!important}#fuel-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#fuel-tuning .fuel-infinite{justify-content:flex-start;margin-top:14px}#fuel-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#fuel-tuning input[type=range]:disabled{opacity:.4}#fuel-tuning output{font-variant-numeric:tabular-nums}</style>
+  <title>游戏</title><link rel="stylesheet" href="./style.css"><style id="no-follow-gate">/* 已移除关注解锁门槛，隐藏相关入口 */#roadster-fuel-open,#vehicle-follow-status,.vehicle-follow-actions,section[aria-labelledby="follower-fuel-title"]{display:none!important}#fuel-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#fuel-tuning .fuel-infinite{justify-content:flex-start;margin-top:14px}#fuel-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#fuel-tuning input[type=range]:disabled{opacity:.4}#fuel-tuning output{font-variant-numeric:tabular-nums}#chunk-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#chunk-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#chunk-tuning output{font-variant-numeric:tabular-nums}#chunk-tuning-status{font-variant-numeric:tabular-nums}</style>
 </head>
 <body>
   <dialog id="landscape-gate" aria-labelledby="landscape-title"><div><div class="landscape-icon" aria-hidden="true">↻</div><h1 id="landscape-title">请横屏游玩</h1><p>横置手机或点击进入；系统不支持横屏时，将自动旋转游戏画面。</p><button id="landscape-enter">进入横屏</button></div></dialog>
@@ -367,6 +367,15 @@ else{W.addEventListener("load",arm,false);}
       <label class="fuel-infinite"><input id="fuel-infinite" type="checkbox"> 无限推进剂</label>
       <p id="fuel-tuning-status" role="status">喷气加速与升空共用一箱，松开喷气后自动回充。</p>
     </section>
+    <section class="settings-section" id="chunk-tuning" aria-labelledby="chunk-tuning-title">
+      <h2 id="chunk-tuning-title">区块加载</h2>
+      <label for="chunk-render">渲染距离<output id="chunk-render-value">4 区块 · 512 m</output></label>
+      <input id="chunk-render" aria-label="渲染距离" type="range" min="1" max="8" step="1" value="4">
+      <label for="chunk-sim">模拟距离<output id="chunk-sim-value">3 区块 · 384 m</output></label>
+      <input id="chunk-sim" aria-label="模拟距离" type="range" min="1" max="8" step="1" value="3">
+      <p id="chunk-tuning-status" role="status">正在统计区块…</p>
+      <p>每个区块 128 × 128 米，全城 16 × 12 共 192 个。超出渲染距离的街区建筑不再绘制，镜头最远距离随之调整；超出模拟距离的人机车辆暂停行驶。模拟距离不会超过渲染距离。</p>
+    </section>
 
     <section class="settings-section roadster-instructions roadster-audio-settings" aria-labelledby="roadster-audio-title">
       <h2 id="roadster-audio-title">声音</h2>
@@ -426,6 +435,14 @@ else{W.addEventListener("load",arm,false);}
     if(s&&typeof s.infinite==='boolean') d.infinite=s.infinite;
   }catch(e){}
   window.__ROADSTER_TUNING__=d;
+  var k={render:4,sim:3};
+  try{
+    var t=JSON.parse(localStorage.getItem('roadster-chunk-tuning')||'null');
+    if(t&&typeof t.render==='number') k.render=Math.max(1,Math.min(8,Math.round(t.render)));
+    if(t&&typeof t.sim==='number') k.sim=Math.max(1,Math.min(8,Math.round(t.sim)));
+  }catch(e){}
+  if(k.sim>k.render) k.sim=k.render;
+  window.__CHUNK_TUNING__=k;
 })();
 </script>
 <script src="./main.js"></script>
@@ -451,6 +468,41 @@ else{W.addEventListener("load",arm,false);}
   range.addEventListener('input',sync);
   inf.addEventListener('change',sync);
   sync();
+})();
+</script>
+<script>
+(function(){
+  var T=window.__CHUNK_TUNING__;
+  var rIn=document.getElementById('chunk-render');
+  var sIn=document.getElementById('chunk-sim');
+  var rOut=document.getElementById('chunk-render-value');
+  var sOut=document.getElementById('chunk-sim-value');
+  var status=document.getElementById('chunk-tuning-status');
+  if(!T||!rIn||!sIn) return;
+  rIn.value=String(T.render);
+  sIn.value=String(T.sim);
+  function sync(from){
+    var r=Math.max(1,Math.min(8,Math.round(Number(rIn.value)||4)));
+    var s=Math.max(1,Math.min(8,Math.round(Number(sIn.value)||3)));
+    if(s>r){
+      if(from==='render'){s=r;sIn.value=String(s);}
+      else{r=s;rIn.value=String(r);}
+    }
+    T.render=r;T.sim=s;
+    rOut.textContent=r+' 区块 · '+(r*128)+' m';
+    sOut.textContent=s+' 区块 · '+(s*128)+' m';
+    if(window.__CHUNK_API__) window.__CHUNK_API__.set(r,s);
+    try{localStorage.setItem('roadster-chunk-tuning',JSON.stringify({render:r,sim:s}));}catch(e){}
+  }
+  rIn.addEventListener('input',function(){sync('render');});
+  sIn.addEventListener('input',function(){sync('sim');});
+  sync();
+  setInterval(function(){
+    var api=window.__CHUNK_API__;
+    if(!api||!status) return;
+    var st=api.stats();
+    status.textContent='已加载 '+st.loaded+' / '+st.total+' 区块 · 行驶中车辆 '+st.cars;
+  },500);
 })();
 </script>
 </body>
