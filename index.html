@@ -224,6 +224,11 @@ else{W.addEventListener("load",arm,false);}
   <title>游戏</title><link rel="stylesheet" href="./style.css"><style id="no-follow-gate">/* 已移除关注解锁门槛，隐藏相关入口 */#roadster-fuel-open,#vehicle-follow-status,.vehicle-follow-actions,section[aria-labelledby="follower-fuel-title"]{display:none!important}#fuel-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#fuel-tuning .fuel-infinite{justify-content:flex-start;margin-top:14px}#fuel-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#fuel-tuning input[type=range]:disabled{opacity:.4}#fuel-tuning output{font-variant-numeric:tabular-nums}#chunk-tuning label{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:13px}#chunk-tuning input[type=range]{width:100%;margin:12px 0 0;accent-color:#a8f0df}#chunk-tuning output{font-variant-numeric:tabular-nums}#chunk-tuning-status{font-variant-numeric:tabular-nums}</style>
 </head>
 <body>
+  <div id="boot-overlay">
+    <img src="./ui/roadster-load.png" alt="">
+    <div class="boot-track" role="progressbar" aria-label="加载进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="boot-bar"></div></div>
+    <div id="boot-text">0%</div>
+  </div>
   <dialog id="landscape-gate" aria-labelledby="landscape-title"><div><div class="landscape-icon" aria-hidden="true">↻</div><h1 id="landscape-title">请横屏游玩</h1><p>横置手机或点击进入；系统不支持横屏时，将自动旋转游戏画面。</p><button id="landscape-enter">进入横屏</button></div></dialog>
   <div id="game-viewport">
   <canvas id="game" aria-label="第三人称游戏画面" tabindex="0"></canvas>
@@ -445,7 +450,59 @@ else{W.addEventListener("load",arm,false);}
   window.__CHUNK_TUNING__=k;
 })();
 </script>
-<script src="./main.js"></script>
+<script>
+/* 启动加载屏：流式下载 main.js 并实时显示进度，下载完成后再执行游戏代码；任何环节失败都退回普通 <script> 加载，游戏照常启动 */
+(function(){
+  var overlay=document.getElementById("boot-overlay"),
+      bar=document.getElementById("boot-bar"),
+      track=overlay.querySelector(".boot-track"),
+      text=document.getElementById("boot-text"),
+      booted=false,plainStarted=false;
+  function hide(){
+    if(booted)return;booted=true;
+    overlay.classList.add("done");
+    setTimeout(function(){if(overlay.parentNode)overlay.parentNode.removeChild(overlay);},700);
+  }
+  function fatal(){text.textContent="main.js 加载失败，请刷新重试";text.classList.add("error");}
+  function plain(){
+    if(plainStarted)return;plainStarted=true;
+    bar.classList.add("indeterminate");
+    var s=document.createElement("script");
+    s.src="./main.js";s.onload=hide;s.onerror=fatal;
+    document.body.appendChild(s);
+  }
+  (async function(){
+    try{
+      var total=0;
+      try{
+        var h=await fetch("./main.js",{method:"HEAD",cache:"force-cache"});
+        total=parseInt(h.headers.get("Content-Length")||"0",10)||0;
+      }catch(e){}
+      var res=await fetch("./main.js",{cache:"force-cache"});
+      if(!res.ok)throw new Error("HTTP "+res.status);
+      if(!res.body)throw new Error("stream unsupported");
+      var reader=res.body.getReader(),chunks=[],got=0;
+      for(;;){
+        var r=await reader.read();
+        if(r.done)break;
+        chunks.push(r.value);got+=r.value.length;
+        if(total){
+          var p=Math.min(100,Math.floor(got/total*100));
+          bar.style.width=p+"%";text.textContent=p+"%";
+          track.setAttribute("aria-valuenow",String(p));
+        }
+      }
+      if(plainStarted)return;
+      var url=URL.createObjectURL(new Blob(chunks,{type:"text/javascript"}));
+      var s=document.createElement("script");
+      s.src=url;
+      s.onload=function(){URL.revokeObjectURL(url);hide();};
+      s.onerror=function(){URL.revokeObjectURL(url);plain();};
+      document.body.appendChild(s);
+    }catch(e){plain();}
+  })();
+})();
+</script>
 <script>
 (function(){
   var T=window.__ROADSTER_TUNING__;
