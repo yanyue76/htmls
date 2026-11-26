@@ -14,7 +14,7 @@ https://yanyue76.github.io/htmls/index.html
 
 | 文件 | 作用 |
 |---|---|
-| `index.html` | 游戏页面（已移除跳转回 B 站的脚本） |
+| `index.html` | 游戏页面 |
 | `style.css` | 样式 |
 | `main.js` | 游戏本体，7.3 MB，Three.js 与贴图全部内联，无外部请求 |
 | `ui/*` | HUD 图标与踏板、方向盘贴图 |
