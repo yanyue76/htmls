@@ -3,9 +3,9 @@
 
 
 ## 游戏直链
-
-```
 [特斯拉城市沙盒](https://yanyue76.github.io/htmls/index.html)
+```
+https://yanyue76.github.io/htmls/index.html
 ```
 
 > 直接在新标签页打开这个地址，就能游玩
