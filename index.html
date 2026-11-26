@@ -248,12 +248,12 @@ else{W.addEventListener("load",arm,false);}
   <div id="roadster-notice" role="status">沿西侧道路体验回环，东侧道路体验反弯坡道</div>
   <div id="roadster-controls">
     <button id="roadster-reset" aria-label="复位Roadster">复位<span class="keyboard-only"> · R</span></button>
-    <button id="roadster-auto" aria-label="自动喷气翻滚及降落" aria-pressed="false">自动：关</button>
+    <button id="roadster-auto" aria-label="自动喷气翻滚及降落" aria-pressed="false">自动：关</button><button id="roadster-fpv" aria-label="切换第一/第三视角" aria-pressed="false"><span id="roadster-fpv-label">视角</span><span class="keyboard-only"> · B</span></button>
     <div id="roadster-keyboard-help" class="keyboard-only" aria-label="键盘操作提示">
       <div><kbd>W / ↑</kbd> 油门 <kbd>S / ↓</kbd> 刹车／倒车 <kbd>A D / ← →</kbd> 转向</div>
       <div><kbd>Shift</kbd> 喷气加速 <kbd>空格</kbd> 喷气升空</div>
       <div><kbd>WASD / ↑↓←→</kbd> 空中方向 <kbd>Q</kbd><kbd>E</kbd> 特技翻滚</div>
-      <div>拖动画面调视角 <kbd>R</kbd> 复位 <kbd>Esc</kbd> 设置</div>
+      <div>拖动画面调视角 <kbd>R</kbd> 复位 <kbd>B</kbd> 第一视角 <kbd>Esc</kbd> 设置</div>
     </div>
     <div id="roadster-air-controls" role="group" aria-label="空中姿态控制">
       <button class="pitch-control" data-roadster="pitch-up" aria-label="抬头">抬头</button><button class="pitch-control" data-roadster="pitch-down" aria-label="低头">低头</button>
@@ -560,6 +560,17 @@ else{W.addEventListener("load",arm,false);}
     var st=api.stats();
     status.textContent='已加载 '+st.loaded+' / '+st.total+' 区块 · 行驶中车辆 '+st.cars;
   },500);
+})();
+</script>
+<script>
+/* 第一视角按钮：与 main.js 的 window.__setFPV__ 联动 */
+(function(){
+  var b=document.getElementById("roadster-fpv");
+  if(!b)return;
+  var label=document.getElementById("roadster-fpv-label");
+  function sync(on){b.classList.toggle("active",!!on);b.setAttribute("aria-pressed",on?"true":"false");if(label)label.textContent=on?"第一视角":"视角"}
+  b.addEventListener("click",function(){var s=window.__setFPV__;if(s)s(!window.__FPV__)});
+  window.addEventListener("roadster-fpv-change",function(e){sync(e.detail.on)});
 })();
 </script>
 </body>
