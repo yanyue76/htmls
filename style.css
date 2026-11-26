@@ -10,3 +10,6 @@
 @keyframes boot-slide{0%{margin-left:-40%}100%{margin-left:100%}}
 #boot-text{font:12px/1 Consolas,Menlo,monospace;color:rgba(23,55,73,.7);letter-spacing:.1em}
 #boot-text.error{color:#c81e1e;font-family:Arial;font-size:14px}
+/* ===== 第一视角按钮 ===== */
+#roadster-fpv{position:absolute;right:var(--safe-right);top:calc(var(--safe-top) + var(--map-size) + 100px);height:40px;min-width:100px;padding:7px 12px;border-radius:20px;font-size:11px;background:rgba(23,46,63,.867);pointer-events:auto}
+#roadster-fpv.active{background:#a8f0df;color:#12333e;border-color:#d5fff4}
