@@ -569,7 +569,7 @@ else{W.addEventListener("load",arm,false);}
   if(!b)return;
   var label=document.getElementById("roadster-fpv-label");
   function sync(on){b.classList.toggle("active",!!on);b.setAttribute("aria-pressed",on?"true":"false");if(label)label.textContent=on?"第一视角":"视角"}
-  b.addEventListener("click",function(){var s=window.__setFPV__;if(s)s(!window.__FPV__)});
+  b.addEventListener("click",function(){var s=window.__setFPV__;if(s)s(!window.__FPV__);b.blur()});
   window.addEventListener("roadster-fpv-change",function(e){sync(e.detail.on)});
 })();
 </script>
